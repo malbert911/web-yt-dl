@@ -1,17 +1,14 @@
 const express = require('express')
 const app = express()
 const fs = require('fs')
+const { type } = require('os')
 const youtubedl = require('youtube-dl')
+const path = require('path'); 
 
 
 //set the template engine ejs
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
-
-
-
-
-
 
 //routes
 app.get('/', (req, res) => {
@@ -22,23 +19,38 @@ app.get('/download', (req, res) => {
     let url = req.query.url;
     let type = req.query.type;
     res.render('index');
-
     switch(type){
         case 'mp4':
-            downloadVideo(url);
+            downloadVideo(url, type);
+            break;
+        case 'mp3':
+            downloadVideo(url, type);
             break;
     }
+    //res.render('index');
 })
 
-function downloadVideo(url){
+function downloadVideo(url, format){
+    let param;
+    
+
+    switch(format){
+        case 'mp4':
+            param = ['-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'];
+            break;
+        case 'mp3':
+            param = ['-x', '--audio-format', 'mp3'];
+            break;
+    }
+    
     const video = youtubedl(url,
     // Optional arguments passed to youtube-dl.
-    ['--format=18'],
+    param,
     // Additional options can be given for calling `child_process.execFile()`.
     { cwd: __dirname })
 
     //filename will be the Youtube video id for now
-    let filename = url.substring(url.indexOf('v=') + 2) + ".mp4";
+    let filename = url.substring(url.indexOf('v=') + 2) + "." + format;
   
   // Will be called when the download starts.
   
@@ -49,7 +61,14 @@ function downloadVideo(url){
     //filename = info._filename
   })
   
+  video.on('end', function() {
+    console.log("done");
+  })
+
   video.pipe(fs.createWriteStream(filename))
+
+  return filename;
+  
 }
 
 //Listen on port 3000
