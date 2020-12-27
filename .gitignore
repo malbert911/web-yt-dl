@@ -1,4 +1,5 @@
 package-lock.json
+public/tmp
 # Logs
 logs
 *.log

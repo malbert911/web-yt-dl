@@ -13,25 +13,29 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.set('views', path.join(__dirname, 'views'));
 
-//routes
+//=========ROUTES============
 app.get('/', (req, res) => {
     res.render('index')
 })
 
+//view when the users file is ready
 app.get('/downloaded', (req, res) => {
     res.render('downloaded')
 
 })
 
+//fetch call from the user to get the downloaded file
 app.get('/get-download', (req, res) => {
     let file = req.query.f;
     res.sendFile(`${baseDownloadPath + file}`);
 })
 
+//view for the user while it is downloading
 app.get('/downloading', (req, res) => {
     res.render('downloading')
 })
 
+//fetch call from the user to check if it is ready while they are on /downloading
 app.get('/downloading-check', (req, res) => {
     let file = req.query.f;
     let stats = fs.statSync(baseDownloadPath + file);
@@ -42,6 +46,7 @@ app.get('/downloading-check', (req, res) => {
 
 })
 
+//start a download
 app.get('/download', (req, res) => {
     let url = req.query.url;
     let type = req.query.type;
@@ -55,53 +60,38 @@ app.get('/download', (req, res) => {
             downloadVideo(url, type);
             break;
     }
-    //res.render('index');
 })
 
 function downloadVideo(url, format){
     let param;
-    
-
     switch(format){
         case 'mp4':
             param = ['-f', 'best'];
             break;
         case 'mp3':
-            //param = ['-x', '--audio-format', 'mp3'];
-            //param = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', 'C:\\Users\\malbert\\source\\web-yt-dl\\public\\tmp\\', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
-            //param = ['-x', '--audio-format', 'mp3', '-o', 'C:\\Users\\malbert\\source\\web-yt-dl\\public\\tmp\\', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
             param = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
             break;
     }
     
-    const video = youtubedl(url,
-    // Optional arguments passed to youtube-dl.
-    param
-    //,
-    // Additional options can be given for calling `child_process.execFile()`.
-    //{ cwd: __dirname }
-    )
+    const video = youtubedl(url, param )
 
     //filename will be the Youtube video id for now
     let filename = url.substring(url.indexOf('v=') + 2) + "." + format;
   
-  // Will be called when the download starts.
-  
-  video.on('info', function(info) {
-    console.log('Download started')
-    console.log('filename: ' + info._filename)
-    console.log('size: ' + info.size)
-    //filename = info._filename
+    // Will be called when the download starts.
+    video.on('info', function(info) {
+        console.log('Download started')
+        console.log('filename: ' + info._filename)
+        console.log('size: ' + info.size)
   })
   
+  //Called when download is completed
   video.on('end', function() {
-    console.log("done");
+    console.log("Done!");
   })
 
-  video.pipe(fs.createWriteStream(baseDownloadPath + filename))
-
-  return filename;
-  
+  //Save the file
+  video.pipe(fs.createWriteStream(baseDownloadPath + filename))  
 }
 
 //Listen on port 3000
