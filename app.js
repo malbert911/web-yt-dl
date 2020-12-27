@@ -15,10 +15,29 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
+app.get('/downloaded', (req, res) => {
+    res.render('downloaded')
+})
+
+app.get('/downloading', (req, res) => {
+    res.render('downloading')
+})
+
+app.get('/downloading-check', (req, res) => {
+    let file = req.query.f;
+    let stats = fs.statSync(file);
+    if(stats.size > 0)
+        res.json({"downloaded": true});
+    else
+        res.json({"downloaded": false});
+
+})
+
 app.get('/download', (req, res) => {
     let url = req.query.url;
     let type = req.query.type;
-    res.render('index');
+    let filename = url.substring(url.indexOf('v=') + 2) + "." + type;
+    res.redirect("/downloading?" + filename)
     switch(type){
         case 'mp4':
             downloadVideo(url, type);
