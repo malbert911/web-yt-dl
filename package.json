@@ -20,6 +20,7 @@
   "dependencies": {
     "ejs": "^2.7.4",
     "express": "^4.16.2",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "youtube-dl": "^3.0.2"
   }
 }
