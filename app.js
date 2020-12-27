@@ -5,7 +5,7 @@ const { type } = require('os')
 const youtubedl = require('youtube-dl')
 const path = require('path'); 
 const baseDownloadPath = __dirname + "/public/tmp/"
-const ffmpeg = require('ffmpeg');
+const ffmpeg = require('ffmpeg-static');
 
 
 //set the template engine ejs
@@ -68,7 +68,9 @@ function downloadVideo(url, format){
             break;
         case 'mp3':
             //param = ['-x', '--audio-format', 'mp3'];
-            param = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', 'C:\\Users\\malbert\\source\\web-yt-dl\\public\\tmp\\', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path]
+            //param = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', 'C:\\Users\\malbert\\source\\web-yt-dl\\public\\tmp\\', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
+            //param = ['-x', '--audio-format', 'mp3', '-o', 'C:\\Users\\malbert\\source\\web-yt-dl\\public\\tmp\\', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
+            param = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg]
             break;
     }
     
