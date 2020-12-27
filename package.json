@@ -1,0 +1,25 @@
+{
+  "name": "web-yt-dl",
+  "version": "1.0.0",
+  "description": "Web client interface for youtube-dl",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malbert911/web-yt-dl.git"
+  },
+  "author": "Matthew Albert",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/malbert911/web-yt-dl/issues"
+  },
+  "homepage": "https://github.com/malbert911/web-yt-dl#readme",
+  "dependencies": {
+    "ejs": "^2.7.4",
+    "express": "^4.16.2",
+    "nodemon": "^1.19.4"
+  }
+}
