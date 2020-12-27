@@ -4,6 +4,7 @@ const fs = require('fs')
 const { type } = require('os')
 const youtubedl = require('youtube-dl')
 const path = require('path'); 
+const baseDownloadPath = __dirname + "/public/tmp/"
 
 
 //set the template engine ejs
@@ -17,6 +18,12 @@ app.get('/', (req, res) => {
 
 app.get('/downloaded', (req, res) => {
     res.render('downloaded')
+
+})
+
+app.get('/get-download', (req, res) => {
+    let file = req.query.f;
+    res.sendFile(`${baseDownloadPath + file}`);
 })
 
 app.get('/downloading', (req, res) => {
@@ -25,7 +32,7 @@ app.get('/downloading', (req, res) => {
 
 app.get('/downloading-check', (req, res) => {
     let file = req.query.f;
-    let stats = fs.statSync(file);
+    let stats = fs.statSync(baseDownloadPath + file);
     if(stats.size > 0)
         res.json({"downloaded": true});
     else
@@ -55,7 +62,7 @@ function downloadVideo(url, format){
 
     switch(format){
         case 'mp4':
-            param = ['-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'];
+            param = ['-f', 'best'];
             break;
         case 'mp3':
             param = ['-x', '--audio-format', 'mp3'];
@@ -64,9 +71,11 @@ function downloadVideo(url, format){
     
     const video = youtubedl(url,
     // Optional arguments passed to youtube-dl.
-    param,
+    param
+    //,
     // Additional options can be given for calling `child_process.execFile()`.
-    { cwd: __dirname })
+    //{ cwd: __dirname }
+    )
 
     //filename will be the Youtube video id for now
     let filename = url.substring(url.indexOf('v=') + 2) + "." + format;
@@ -84,7 +93,7 @@ function downloadVideo(url, format){
     console.log("done");
   })
 
-  video.pipe(fs.createWriteStream(filename))
+  video.pipe(fs.createWriteStream(baseDownloadPath + filename))
 
   return filename;
   
