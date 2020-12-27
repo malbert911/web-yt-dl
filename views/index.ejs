@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>web-yt-dl</title>
-</head>
-<body>
+<%- include('partials/header.ejs') %>
 <h1>web-yt-dl</h1>
 <form method="GET" action="download">
-    <input name="url" placeholder="url"/>
-    <select name="type">
-        <option value="mp3">mp3</option>
-        <option value="mp4">mp4</option>
-    </select>
-    <input type="submit" value="download"/>
+    <div class="row">
+
+    
+        <div class="input-field col s6">
+            <label for="url">YouTube URL</label>
+            <input id="url" name="url" type="text" required/>
+        </div>
+        <div class="input-field col s3">
+            <select name="type" required>
+                <optgroup label="Audio">
+                    <option value="mp3">mp3</option>
+                </optgroup>
+                
+                <optgroup label="Video and Audio">
+                    <option value="mp4">mp4</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="input-field col s3">
+            <button class="waves-effect waves-light btn" type="submit">Download</button>
+        </div>
+    </div>
 </form>
-</body>
-</html>
+<%- include('partials/footer.ejs') %>

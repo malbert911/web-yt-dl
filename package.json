@@ -4,6 +4,7 @@
   "description": "Web client interface for youtube-dl",
   "main": "app.js",
   "scripts": {
+    "prestart": "node-sass ./theme.scss ./public/css/style.css",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app"
   },
@@ -21,6 +22,9 @@
     "ejs": "^2.7.4",
     "express": "^4.16.2",
     "nodemon": "^1.19.4",
-    "youtube-dl": "^3.0.2"
+    "youtube-dl": "^3.0.2",
+    "ffmpeg": "^0.0.4",
+    "materialize-css": "^1.0.0",
+    "node-sass": "^4.7.2"
   }
 }
